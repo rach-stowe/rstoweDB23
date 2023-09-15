@@ -2,53 +2,53 @@ FIELD SPECIFICATIONS
 
 GENERAL ELEMENTS
 
-Field Name:           _ 
-Parent Table:         _ 
-Alias(es):            _ 
+Field Name:           Consumers.Address
+Parent Table:         Consumers
+Alias(es):            None
 Specification Type:
-  Unique:  _ 
-  Generic: _ 
-  Replica: _ 
-Source Specification: _ 
-Shared By:            _ 
-Description:          _ 
+  Unique:  X 
+  Generic: _
+  Replica: _
+Source Specification: None 
+Shared By:            None 
+Description:          This is a string identifying the street address of a consumer
 
 
 PHYSICAL ELEMENTS
 
-Data Type:            _ 
-Length:               _ 
-Decimal Places:       _  
+Data Type:            CHAR 
+Length:               64 
+Decimal Places:       None  
 Character Support:
-  Letters (A-Z):      _ 
-  Numbers (0-9):      _ 
-  Keyboard (.,/$#%):  _ 
-  Special (©®™Σπ):    _ 
+  Letters (A-Z):      X 
+  Numbers (0-9):      X 
+  Keyboard (.,/$#%):  X 
+  Special (©®™Σπ):    _
 
 
 LOGICAL ELEMENTS
 
-Key Type:      Non:        _ 
+Key Type:      Non:        X 
                Primary:    _ 
                Foreign:    _ 
                Alternate:  _ 
 
-Key Structure: Simple:     _ 
+Key Structure: Simple:     X 
                Composite:  _ 
 
-Uniqueness:    Non-unique: _ 
+Uniqueness:    Non-unique: X 
                Unique:     _ 
 
-Null Support:  Nulls OK:   _ 
+Null Support:  Nulls OK:   X 
                No nulls:   _ 
 
-Values Entered By: User:   _ 
+Values Entered By: User:   X 
                    System: _ 
 
-Required Value:    No:     _ 
+Required Value:    No:     X 
                    Yes:    _ 
 
-Range of Values:   _ 
+Range of Values:   None 
 
 Edit Rule:
   Enter now, edits allowed:       _ 
