@@ -2,26 +2,26 @@ FIELD SPECIFICATIONS
 
 GENERAL ELEMENTS
 
-Field Name:           _ 
-Parent Table:         _ 
+Field Name:           ConsumerID 
+Parent Table:         Ratings 
 Alias(es):            _ 
 Specification Type:
   Unique:  _ 
   Generic: _ 
-  Replica: _ 
-Source Specification: _ 
+  Replica: X 
+Source Specification: Consumer ID number from the Consumers table
 Shared By:            _ 
-Description:          _ 
+Description:          An integer identifying the ID number linked to each movie rating to identify which consumer wrote that rating.
 
 
 PHYSICAL ELEMENTS
 
-Data Type:            _ 
+Data Type:            Unsigned Integer 
 Length:               _ 
 Decimal Places:       _  
 Character Support:
   Letters (A-Z):      _ 
-  Numbers (0-9):      _ 
+  Numbers (0-9):      X 
   Keyboard (.,/$#%):  _ 
   Special (©®™Σπ):    _ 
 
@@ -29,30 +29,30 @@ Character Support:
 LOGICAL ELEMENTS
 
 Key Type:      Non:        _ 
-               Primary:    _ 
-               Foreign:    _ 
+               Primary:    X 
+               Foreign:    X 
                Alternate:  _ 
 
 Key Structure: Simple:     _ 
-               Composite:  _ 
+               Composite:  X 
 
 Uniqueness:    Non-unique: _ 
-               Unique:     _ 
+               Unique:     X 
 
 Null Support:  Nulls OK:   _ 
-               No nulls:   _ 
+               No nulls:   X 
 
-Values Entered By: User:   _ 
+Values Entered By: User:   X
                    System: _ 
 
 Required Value:    No:     _ 
-                   Yes:    _ 
+                   Yes:    X 
 
-Range of Values:   _ 
+Range of Values:   Unsigned integers 
 
 Edit Rule:
   Enter now, edits allowed:       _ 
-  Enter now, edits not allowed:   _ 
+  Enter now, edits not allowed:   X 
   Enter later, edits allowed:     _ 
   Enter later, edits not allowed: _ 
   Not determined at this time:    _ 

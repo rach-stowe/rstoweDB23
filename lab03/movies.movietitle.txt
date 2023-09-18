@@ -2,56 +2,56 @@ FIELD SPECIFICATIONS
 
 GENERAL ELEMENTS
 
-Field Name:           _ 
-Parent Table:         _ 
+Field Name:           MovieTitle 
+Parent Table:         Movies 
 Alias(es):            _ 
 Specification Type:
-  Unique:  _ 
+  Unique:  X 
   Generic: _ 
   Replica: _ 
 Source Specification: _ 
 Shared By:            _ 
-Description:          _ 
+Description:          A string identifying the title of a movie. 
 
 
 PHYSICAL ELEMENTS
 
-Data Type:            _ 
-Length:               _ 
+Data Type:            Alphanumeric 
+Length:               128 
 Decimal Places:       _  
 Character Support:
-  Letters (A-Z):      _ 
-  Numbers (0-9):      _ 
-  Keyboard (.,/$#%):  _ 
+  Letters (A-Z):      X 
+  Numbers (0-9):      X 
+  Keyboard (.,/$#%):  X 
   Special (©®™Σπ):    _ 
 
 
 LOGICAL ELEMENTS
 
-Key Type:      Non:        _ 
+Key Type:      Non:        X 
                Primary:    _ 
                Foreign:    _ 
                Alternate:  _ 
 
-Key Structure: Simple:     _ 
+Key Structure: Simple:     X 
                Composite:  _ 
 
-Uniqueness:    Non-unique: _ 
+Uniqueness:    Non-unique: X 
                Unique:     _ 
 
 Null Support:  Nulls OK:   _ 
-               No nulls:   _ 
+               No nulls:   X 
 
-Values Entered By: User:   _ 
+Values Entered By: User:   X 
                    System: _ 
 
 Required Value:    No:     _ 
-                   Yes:    _ 
+                   Yes:    X 
 
-Range of Values:   _ 
+Range of Values:   All valid titles of existing movies. 
 
 Edit Rule:
-  Enter now, edits allowed:       _ 
+  Enter now, edits allowed:       X 
   Enter now, edits not allowed:   _ 
   Enter later, edits allowed:     _ 
   Enter later, edits not allowed: _ 

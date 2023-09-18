@@ -2,26 +2,26 @@ FIELD SPECIFICATIONS
 
 GENERAL ELEMENTS
 
-Field Name:           _ 
-Parent Table:         _ 
+Field Name:           ConsumerID 
+Parent Table:         Consumers 
 Alias(es):            _ 
 Specification Type:
-  Unique:  _ 
+  Unique:  X 
   Generic: _ 
   Replica: _ 
 Source Specification: _ 
 Shared By:            _ 
-Description:          _ 
+Description:          A unique integer identifying each movie consumer within the Consumers table. 
 
 
 PHYSICAL ELEMENTS
 
-Data Type:            _ 
+Data Type:            Unsigned Integer 
 Length:               _ 
 Decimal Places:       _  
 Character Support:
   Letters (A-Z):      _ 
-  Numbers (0-9):      _ 
+  Numbers (0-9):      X 
   Keyboard (.,/$#%):  _ 
   Special (©®™Σπ):    _ 
 
@@ -29,29 +29,29 @@ Character Support:
 LOGICAL ELEMENTS
 
 Key Type:      Non:        _ 
-               Primary:    _ 
+               Primary:    X 
                Foreign:    _ 
                Alternate:  _ 
 
-Key Structure: Simple:     _ 
+Key Structure: Simple:     X 
                Composite:  _ 
 
 Uniqueness:    Non-unique: _ 
-               Unique:     _ 
+               Unique:     X 
 
 Null Support:  Nulls OK:   _ 
-               No nulls:   _ 
+               No nulls:   X 
 
 Values Entered By: User:   _ 
-                   System: _ 
+                   System: X 
 
 Required Value:    No:     _ 
-                   Yes:    _ 
+                   Yes:    X 
 
-Range of Values:   _ 
+Range of Values:   Unsigned Integers 
 
 Edit Rule:
-  Enter now, edits allowed:       _ 
+  Enter now, edits allowed:       X 
   Enter now, edits not allowed:   _ 
   Enter later, edits allowed:     _ 
   Enter later, edits not allowed: _ 

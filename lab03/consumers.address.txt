@@ -2,7 +2,7 @@ FIELD SPECIFICATIONS
 
 GENERAL ELEMENTS
 
-Field Name:           Consumers.Address
+Field Name:           Address
 Parent Table:         Consumers
 Alias(es):            None
 Specification Type:
@@ -11,18 +11,18 @@ Specification Type:
   Replica: _
 Source Specification: None 
 Shared By:            None 
-Description:          This is a string identifying the street address of a consumer
+Description:          A string stating a movie consumer's street address. This will be used to send information to the consumer by mail.
 
 
 PHYSICAL ELEMENTS
 
-Data Type:            CHAR 
+Data Type:            Alphanumeric 
 Length:               64 
-Decimal Places:       None  
+Decimal Places:         
 Character Support:
   Letters (A-Z):      X 
   Numbers (0-9):      X 
-  Keyboard (.,/$#%):  X 
+  Keyboard (.,/$#%):  _
   Special (©®™Σπ):    _
 
 
@@ -33,25 +33,25 @@ Key Type:      Non:        X
                Foreign:    _ 
                Alternate:  _ 
 
-Key Structure: Simple:     X 
+Key Structure: Simple:     _ 
                Composite:  _ 
 
 Uniqueness:    Non-unique: X 
                Unique:     _ 
 
-Null Support:  Nulls OK:   X 
-               No nulls:   _ 
+Null Support:  Nulls OK:   _ 
+               No nulls:   X 
 
 Values Entered By: User:   X 
                    System: _ 
 
-Required Value:    No:     X 
-                   Yes:    _ 
+Required Value:    No:     _ 
+                   Yes:    X 
 
-Range of Values:   None 
+Range of Values:   All valid street addresses within the United States
 
 Edit Rule:
-  Enter now, edits allowed:       _ 
+  Enter now, edits allowed:       X 
   Enter now, edits not allowed:   _ 
   Enter later, edits allowed:     _ 
   Enter later, edits not allowed: _ 
