@@ -32,8 +32,8 @@ CREATE TABLE consumers (
 
 /* Create ratings table to hold movie ID, consumer ID, rating date, and number of stars in a rating */
 CREATE TABLE ratings (
-    FOREIGN KEY (movie_id) REFERENCES (movies(movie_id)),
-    FOREIGN KEY (consumer_id) REFERENCES (consumers(consumer_id)),
+    FOREIGN KEY (movie_id) REFERENCES movies(movie_id),
+    FOREIGN KEY (consumer_id) REFERENCES consumers(consumer_id),
     movie_id       INT unsigned    NOT NULL,
     consumer_id    INT unsigned    NOT NULL,
     rating_date    DATETIME        NOT NULL,
@@ -41,7 +41,7 @@ CREATE TABLE ratings (
 );
 
 /* Insert data into the three tables */
-INSERT INTO movies (movie_title, release_date, genre)
+INSERT INTO movies (movie_title, release_date, movie_genre)
 VALUES ('The Hunt for Red October',        '1990-03-02', 'Acton, Adventure, Thriller'),
        ('Lady Bird',                       '2017-12-01', 'Comedy, Drama'),
        ('Inception',                       '2010-08-16', 'Acton, Adventure, Science Fiction'),
@@ -60,5 +60,12 @@ VALUES (1, 1, '2010-09-02 10:54:19', 4),
        (2, 3, '2017-03-27 00:12:48', 2),
        (2, 4, '2018-08-02 00:54:42', 4);
 
+/* Show the formats of the three tables */
 SHOW CREATE TABLE movies;
+SHOW CREATE TABLE consumers;
+SHOW CREATE TABLE ratings;
+
+/* Display the information from the three tables */
 SELECT * from movies;
+SELECT * from consumers;
+SELECT * from ratings;
