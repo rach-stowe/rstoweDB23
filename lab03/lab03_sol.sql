@@ -99,6 +99,7 @@ CREATE TABLE movies (
 /* Create genres table to hold the genre(s) of each movie */
 CREATE TABLE genres (
     FOREIGN KEY (movie_id) REFERENCES movies(movie_id),
+    PRIMARY KEY (movie_id),
     movie_id      INT unsigned  NOT NULL,
     movie_genre   VARCHAR(64)   NOT NULL
 );
@@ -119,6 +120,7 @@ CREATE TABLE consumers (
 CREATE TABLE ratings (
     FOREIGN KEY (movie_id) REFERENCES movies(movie_id),
     FOREIGN KEY (consumer_id) REFERENCES consumers(consumer_id),
+    PRIMARY KEY (movie_id, consumer_id),
     movie_id       INT unsigned    NOT NULL,
     consumer_id    INT unsigned    NOT NULL,
     rating_date    DATETIME        NOT NULL,
