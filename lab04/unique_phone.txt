@@ -1,0 +1,57 @@
+BUSINESS RULE SPECIFICATIONS
+
+RULE INFORMATION
+
+Statement:  This rule guarantees that no two customers have the same phone number. 
+
+Constraint: When entering a phone number for a new customer, the phone number
+            entered will be compared to the list of phone numbers stored in the Customer_Phones
+            table to confirm that the number is unique before storing it in the customer_phone field.
+
+Type:     Database Oriented:     X 
+          Application Oriented   _ 
+
+Category: Field Specific:        _ 
+          Relationship Specific: X 
+
+Test On:  Insert:                X 
+          Delete:                _ 
+          Update:                _
+
+
+STRUCTURES AFFECTED
+
+Field Names: customer_phone 
+
+Table Names: Customers, Customer_Phones
+
+
+FIELD ELEMENTS AFFECTED
+
+Physical Elements: Data Type:           _ 
+                   Length:              _ 
+                   Character Support:   _ 
+
+Logical Elements:  Key Type:            _ 
+                   Key Structure:       _ 
+                   Uniqueness:          _ 
+                   Null Support:        _ 
+                   Values Entered By:   _ 
+                   Range of Values:     _ 
+                   Edit Rule:           _ 
+
+
+RELATIONSHIP CHARACTERISTICS AFFECTED
+
+    Deletion rule:              _
+    Type of participation:      _
+    Degree of participation:    X
+
+    
+ACTION TAKEN
+
+If a phone number is entered for a new customer, it will be validated using the 
+Customer_Phones table before it is stored in the database.
+
+
+NOTES: _

@@ -1,0 +1,55 @@
+BUSINESS RULE SPECIFICATIONS
+
+RULE INFORMATION
+
+Statement:  A rug cannot be deleted from the database unless it has not been interacted
+            with by a customer in any way.
+
+Constraint: The rug cannot be deleted if its ID appears in any recorded carpet sale.
+
+Type:     Database Oriented:     _ 
+          Application Oriented   X 
+
+Category: Field Specific:        _ 
+          Relationship Specific: _ 
+
+Test On:  Insert:                _ 
+          Delete:                X 
+          Update:                _
+
+
+STRUCTURES AFFECTED
+
+Field Names: carpet_id 
+
+Table Names: Carpets
+
+
+FIELD ELEMENTS AFFECTED
+
+Physical Elements: Data Type:           _ 
+                   Length:              _ 
+                   Character Support:   _ 
+
+Logical Elements:  Key Type:            _ 
+                   Key Structure:       _ 
+                   Uniqueness:          _ 
+                   Null Support:        _ 
+                   Values Entered By:   _ 
+                   Range of Values:     _ 
+                   Edit Rule:           _ 
+
+
+RELATIONSHIP CHARACTERISTICS AFFECTED
+
+    Deletion rule:              X
+    Type of participation:      _
+    Degree of participation:    _
+
+    
+ACTION TAKEN
+
+A rug will not be deleted if its carpet_id appears in the Carpet_Sales table.
+
+
+NOTES: _

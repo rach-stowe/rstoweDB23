@@ -1,0 +1,55 @@
+BUSINESS RULE SPECIFICATIONS
+
+RULE INFORMATION
+
+Statement:  A customer cannot be deleted from the database, but they can be flagged as inactive.
+
+Constraint: No customer or any of their information may be deleted from the Customers table.
+
+Type:     Database Oriented:     _ 
+          Application Oriented   X 
+
+Category: Field Specific:        _ 
+          Relationship Specific: _ 
+
+Test On:  Insert:                _ 
+          Delete:                X 
+          Update:                _
+
+
+STRUCTURES AFFECTED
+
+Field Names: customer_activity
+
+Table Names: Customers
+
+
+FIELD ELEMENTS AFFECTED
+
+Physical Elements: Data Type:           _ 
+                   Length:              _ 
+                   Character Support:   _ 
+
+Logical Elements:  Key Type:            _ 
+                   Key Structure:       _ 
+                   Uniqueness:          _ 
+                   Null Support:        _ 
+                   Values Entered By:   _ 
+                   Range of Values:     _ 
+                   Edit Rule:           _ 
+
+
+RELATIONSHIP CHARACTERISTICS AFFECTED
+
+    Deletion rule:              X
+    Type of participation:      _
+    Degree of participation:    _
+
+    
+ACTION TAKEN
+
+ A value of "inactive" can be entered in customer_activity if a customer has an invalid
+ address or has not made a purchase in several years.
+
+
+NOTES: _
