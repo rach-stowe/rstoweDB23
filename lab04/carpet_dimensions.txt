@@ -2,13 +2,11 @@ BUSINESS RULE SPECIFICATIONS
 
 RULE INFORMATION
 
-Statement:  This rule guarantees that no two customers have the same phone number. 
+Statement:  This rule specifies the units used to measure a rug.
 
-Constraint: When entering a phone number for a new customer, the phone number
-            entered will be compared to the other phone numbers alrady in the database
-            to ensure that it has not already been taken.
+Constraint: The rug's length and width will be recorded in feet and will require a positive decimal number.
 
-Type:     Database Oriented:     X 
+Type:     Database Oriented:     X
           Application Oriented   _ 
 
 Category: Field Specific:        X 
@@ -21,23 +19,23 @@ Test On:  Insert:                X
 
 STRUCTURES AFFECTED
 
-Field Names: customer_phone 
+Field Names: carpet_width, carpet_length 
 
-Table Names: Customers
+Table Names: Carpets
 
 
 FIELD ELEMENTS AFFECTED
 
-Physical Elements: Data Type:           _ 
+Physical Elements: Data Type:           X 
                    Length:              _ 
                    Character Support:   _ 
 
 Logical Elements:  Key Type:            _ 
                    Key Structure:       _ 
-                   Uniqueness:          X 
+                   Uniqueness:          _ 
                    Null Support:        _ 
                    Values Entered By:   _ 
-                   Range of Values:     _ 
+                   Range of Values:     X 
                    Edit Rule:           _ 
 
 
@@ -50,8 +48,7 @@ RELATIONSHIP CHARACTERISTICS AFFECTED
     
 ACTION TAKEN
 
-If a phone number is entered for a new customer, it will be validated using the 
-unique constraint before being stored in the database.
+Only positive decimal values will be accepted for a carpet's length and width.
 
 
 NOTES: _

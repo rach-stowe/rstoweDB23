@@ -2,11 +2,9 @@ BUSINESS RULE SPECIFICATIONS
 
 RULE INFORMATION
 
-Statement:  This rule guarantees that no two customers have the same phone number. 
+Statement:  This rule specifies the countries that can be entered for a rug's origin.
 
-Constraint: When entering a phone number for a new customer, the phone number
-            entered will be compared to the other phone numbers alrady in the database
-            to ensure that it has not already been taken.
+Constraint: A rug's country of origin can be Turkey, Iran, India, or Afghanistan. 
 
 Type:     Database Oriented:     X 
           Application Oriented   _ 
@@ -21,9 +19,9 @@ Test On:  Insert:                X
 
 STRUCTURES AFFECTED
 
-Field Names: customer_phone 
+Field Names: carpet_country 
 
-Table Names: Customers
+Table Names: Carpets, Carpet_Countries
 
 
 FIELD ELEMENTS AFFECTED
@@ -34,10 +32,10 @@ Physical Elements: Data Type:           _
 
 Logical Elements:  Key Type:            _ 
                    Key Structure:       _ 
-                   Uniqueness:          X 
+                   Uniqueness:          _ 
                    Null Support:        _ 
                    Values Entered By:   _ 
-                   Range of Values:     _ 
+                   Range of Values:     X 
                    Edit Rule:           _ 
 
 
@@ -50,8 +48,7 @@ RELATIONSHIP CHARACTERISTICS AFFECTED
     
 ACTION TAKEN
 
-If a phone number is entered for a new customer, it will be validated using the 
-unique constraint before being stored in the database.
+A validation table, Carpet_Countries, will be used to validate inputs.
 
 
 NOTES: _

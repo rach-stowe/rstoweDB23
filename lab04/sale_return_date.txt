@@ -2,9 +2,12 @@ BUSINESS RULE SPECIFICATIONS
 
 RULE INFORMATION
 
-Statement:  This rule ensures that each carpet sale is linked to exactly one customer.
+Statement:  This rule clarifies the meaning of the return date of a carpet sale.
 
-Constraint: A sale id cannot be entered twice into the Carpet_Sales table.
+Constraint: A return date is only entered if a customer is renting a rug. If a customer
+            purchases a rug outright, no return date is entered. If a customer buys a rug 
+            after renting, the anticipated return date is removed. If a customer returns 
+            a rug after renting, the return date remains.
 
 Type:     Database Oriented:     X 
           Application Oriented   _ 
@@ -12,14 +15,14 @@ Type:     Database Oriented:     X
 Category: Field Specific:        X 
           Relationship Specific: _ 
 
-Test On:  Insert:                X 
+Test On:  Insert:                X
           Delete:                _ 
           Update:                _
 
 
 STRUCTURES AFFECTED
 
-Field Names: sale_id
+Field Names: carpet_return_date 
 
 Table Names: Carpet_Sales
 
@@ -32,11 +35,11 @@ Physical Elements: Data Type:           _
 
 Logical Elements:  Key Type:            _ 
                    Key Structure:       _ 
-                   Uniqueness:          X 
-                   Null Support:        _ 
+                   Uniqueness:          _ 
+                   Null Support:        X 
                    Values Entered By:   _ 
-                   Range of Values:     _ 
-                   Edit Rule:           _ 
+                   Range of Values:     X 
+                   Edit Rule:           X 
 
 
 RELATIONSHIP CHARACTERISTICS AFFECTED
@@ -48,7 +51,7 @@ RELATIONSHIP CHARACTERISTICS AFFECTED
     
 ACTION TAKEN
 
-Each sale id will be generated using a unique integer.
+The carpet_return_date field can be edited a record is entered, and null values are accepted.
 
 
 NOTES: _

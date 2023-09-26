@@ -2,7 +2,7 @@ BUSINESS RULE SPECIFICATIONS
 
 RULE INFORMATION
 
-Statement:  Each customer may only try four rugs at a time.
+Statement:  Each customer may only try up to four rugs at a time.
 
 Constraint: There may only be up to four carpet sales linked to a single customer
             that have a return date.
@@ -20,7 +20,7 @@ Test On:  Insert:                X
 
 STRUCTURES AFFECTED
 
-Field Names: customer_id, carpet_id 
+Field Names: sale_id
 
 Table Names: Carpet_Sales
 

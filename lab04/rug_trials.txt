@@ -4,8 +4,8 @@ RULE INFORMATION
 
 Statement:  The same rug can only be loaned out to at most one customer at a time.
 
-Constraint: A carpet sale cannot be entered if there already exists a record for that carpet 
-            either with no return date or with a return date that has not yet passed.
+Constraint: A carpet sale is invalid if there already exists a record for that carpet 
+            either being sold with no return date or rented out with a return date that has not yet passed.
 
 Type:     Database Oriented:     X 
           Application Oriented   _ 
@@ -20,7 +20,7 @@ Test On:  Insert:                X
 
 STRUCTURES AFFECTED
 
-Field Names: customer_id, carpet_id
+Field Names: sale_id
 
 Table Names: Carpet_Sales
 
@@ -49,8 +49,8 @@ RELATIONSHIP CHARACTERISTICS AFFECTED
     
 ACTION TAKEN
 
-The record will not be entered if the carpet_return_date is either empty or
-containing a future date. 
+The record will not be entered if the carpet_return_date either is empty or
+holds a future date. 
 
 
 NOTES: _

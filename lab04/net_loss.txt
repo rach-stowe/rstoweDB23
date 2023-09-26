@@ -21,9 +21,9 @@ Test On:  Insert:                X
 
 STRUCTURES AFFECTED
 
-Field Names: carpet_sale_price, carpet_sale_profit 
+Field Names: sale_price, sale_net
 
-Table Names: Carpet_Sales
+Table Names: Carpet_Sales, Sale_Profits
 
 
 FIELD ELEMENTS AFFECTED
