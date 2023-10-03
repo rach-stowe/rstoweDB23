@@ -12,27 +12,27 @@ CREATE DATABASE carpet_store;
 /* Create Carpet Countries table to store valid countries of origin for carpets */
 CREATE TABLE Carpet_Countries (
     PRIMARY KEY (carpet_country),
-    carpet_country  VARCHAR(64) NOT NULL
+    carpet_country  VARCHAR(64) DEFAULT 'unknown'
 );
 
 /* Create Carpet Styles table to store valid styles for carpets */
 CREATE TABLE Carpet_Styles (
     PRIMARY KEY (carpet_style),
-    carpet_style  VARCHAR(64) NOT NULL
+    carpet_style  VARCHAR(64) DEFAULT 'unknown'
 );
 
 /* Create Carpet Materials table to store valid materials for carpets */
 CREATE TABLE Carpet_Materials (
     PRIMARY KEY (carpet_material),
-    carpet_material  VARCHAR(64) NOT NULL
+    carpet_material  VARCHAR(64) DEFAULT 'unknown'
 );
 
 /* Create Carpets table to store information about all carpets that have been stocked in the store */
 CREATE TABLE Carpets (
     PRIMARY KEY (carpet_id),
-    FOREIGN KEY (carpet_country)  REFERENCES Carpet_Countries(carpet_country),
-    FOREIGN KEY (carpet_style)    REFERENCES Carpet_Styles(carpet_style),
-    FOREIGN KEY (carpet_material) REFERENCES Carpet_Materials(carpet_material),
+    FOREIGN KEY (carpet_country)  REFERENCES Carpet_Countries(carpet_country) ON DELETE SET DEFAULT,
+    FOREIGN KEY (carpet_style)    REFERENCES Carpet_Styles(carpet_style) ON DELETE SET DEFAULT,
+    FOREIGN KEY (carpet_material) REFERENCES Carpet_Materials(carpet_material) ON DELETE SET DEFAULT,
     carpet_id                   INT unsigned    NOT NULL AUTO_INCREMENT,
     carpet_country              VARCHAR(64)     NOT NULL,
     carpet_style                VARCHAR(64)     NOT NULL,
@@ -63,7 +63,7 @@ CREATE TABLE Customers (
     customer_state              VARCHAR(2)      NOT NULL,
     customer_zip                VARCHAR(5)      NOT NULL,
     customer_phone              VARCHAR(10)     UNIQUE,
-    customer_activity           VARCHAR(10)
+    customer_activity           BOOLEAN         DEFAULT TRUE
 );
 
 /* Create Carpet Sales table to store information about each carpet sale */
@@ -84,6 +84,7 @@ CREATE TABLE Carpet_Rentals (
     FOREIGN KEY (carpet_id)   REFERENCES Carpets(carpet_id),
     customer_id             INT unsigned    NOT NULL,
     carpet_id               INT unsigned    NOT NULL,
+    rental_date             DATE            NOT NULL,
     expected_return_date    DATE            NOT NULL,
     actual_return_date      DATE
 );
@@ -167,13 +168,13 @@ VALUES ('Turkey', 'Ushak',  'Wool', 5,  7,  1925, 625,   20170406, 100),
 
 /* Fill Customers table */
 INSERT INTO Customers (customer_first_name, customer_last_name, customer_street_address, customer_city, 
-                      customer_state, customer_zip, customer_phone, customer_activity)
-VALUES ('Akira',    'Ingram',  '68 Country Drive',       'Roseville',      'MI', '48066', '9262526716', 'Active'),
-       ('Meredith', 'Spencer', '9044 Piper Lane',        'North Royalton', 'OH', '44133', '8175305994', 'Active'),
-       ('Marco',    'Page',    '747 East Harrison Lane', 'Atlanta',        'GA', '30303', '5887996535', 'Active'),
-       ('Sandra',   'Page',    '47 East Harrison Lane',  'Atlanta',        'GA', '30303', '9976972666', 'Active'),
-       ('Gloria',   'Gomez',   '78 Corona Road',         'Fullerton',      'CA', '92831',  NULL,        'Active'),
-       ('Bria',     'Le',      '386 Silver Spear Court', 'Coraopolis',     'PA', '15108',  NULL,        'Active');
+                      customer_state, customer_zip, customer_phone)
+VALUES ('Akira',    'Ingram',  '68 Country Drive',       'Roseville',      'MI', '48066', '9262526716'),
+       ('Meredith', 'Spencer', '9044 Piper Lane',        'North Royalton', 'OH', '44133', '8175305994'),
+       ('Marco',    'Page',    '747 East Harrison Lane', 'Atlanta',        'GA', '30303', '5887996535'),
+       ('Sandra',   'Page',    '47 East Harrison Lane',  'Atlanta',        'GA', '30303', '9976972666'),
+       ('Gloria',   'Gomez',   '78 Corona Road',         'Fullerton',      'CA', '92831',  NULL),
+       ('Bria',     'Le',      '386 Silver Spear Court', 'Coraopolis',     'PA', '15108',  NULL);
 
 /* Fill Carpet Sales table */
 INSERT INTO Carpet_Sales (customer_id, carpet_id, sale_date, sale_price)
@@ -181,8 +182,8 @@ VALUES (5, 1, 20171214, 990),
        (6, 3, 20171224, 2400);
 
 /* Fill Carpet Rentals table */
-INSERT INTO Carpet_Rentals (customer_id, carpet_id, expected_return_date, actual_return_date)
-VALUES (2, 2, 20171226, 20171226);
+INSERT INTO Carpet_Rentals (customer_id, carpet_id, rental_date, expected_return_date, actual_return_date)
+VALUES (2, 2, 20171224, 20171226, 20171226);
 
 /* Display Carpets table */
 SELECT carpet_id AS 'Inventory #',
@@ -209,5 +210,48 @@ SELECT customer_first_name AS 'First Name',
   FROM Customers; 
 
 /* Display Carpet Sales table */
+SELECT customer_first_name AS 'First Name',
+       customer_last_name AS 'Last Name',
+       customer_street_address AS 'Street Address', 
+       customer_city AS 'City',
+       customer_state AS 'State',
+       customer_zip AS 'Zip Code',
+       carpet_id AS 'Inventory #',
+       carpet_country AS 'Country',
+       carpet_style AS 'Style',
+       carpet_material AS 'Material',
+       carpet_year AS 'Year of Origin',
+       carpet_width AS 'Width',
+       carpet_length AS 'Length',
+       sale_date AS 'Sale Date',
+       sale_price AS 'Sale Price',
+       carpet_purchase_price AS 'Original Cost',
+       (sale_price - carpet_purchase_price) AS 'Net on Sale'
+  FROM Carpet_Sales
+       LEFT OUTER JOIN Carpets
+       USING (carpet_id)
+       LEFT OUTER JOIN Customers
+       USING (customer_id);
 
 /* Display Carpet Rentals table */
+SELECT customer_first_name AS 'First Name',
+       customer_last_name AS 'Last Name',
+       customer_street_address AS 'Street Address', 
+       customer_city AS 'City',
+       customer_state AS 'State',
+       customer_zip AS 'Zip Code',
+       carpet_id AS 'Inventory #',
+       carpet_country AS 'Country',
+       carpet_style AS 'Style',
+       carpet_material AS 'Material',
+       carpet_year AS 'Year of Origin',
+       carpet_width AS 'Width',
+       carpet_length AS 'Length',
+       rental_date AS 'Rental Date',
+       expected_return_date AS 'Expected Return Date',
+       actual_return_date AS 'Actual Return Date'   
+  FROM Carpet_Rentals
+       LEFT OUTER JOIN Carpets
+       USING (carpet_id)
+       LEFT OUTER JOIN Customers
+       USING (customer_id);
