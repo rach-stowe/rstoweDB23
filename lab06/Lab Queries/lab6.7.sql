@@ -5,11 +5,13 @@ USE red_river_climbs;
 sport climb in the database. Each climb should have only one 
 row in the output. */
 
-SELECT climb_name AS 'Climb Name', climb_bolts AS 'Num Bolts', climber_handle AS 'Nickname'
-  FROM climbers
-       INNER JOIN first_ascents
-       USING (climber_id)
+SELECT climb_name AS 'Climb Name', climb_bolts AS 'Num Bolts', 
+       GROUP_CONCAT(climber_handle) AS 'Nicknames'
+  FROM first_ascents
+       INNER JOIN sport_climbs
+       USING (climb_id)
        INNER JOIN climbs
        USING (climb_id)
-       INNER JOIN sport_climbs
-       USING (climb_id);
+       INNER JOIN climbers
+       USING (climber_id)
+       GROUP BY (climb_id);

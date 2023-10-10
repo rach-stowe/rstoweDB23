@@ -39,8 +39,8 @@ CREATE TABLE climbs (
     climb_id            INT AUTO_INCREMENT  NOT NULL,
     climb_name          VARCHAR(80) DEFAULT 'Open Project',
     climb_grade         INT,
-    -- first_ascent_id     INT DEFAULT NULL,
-    -- climb_equipped_by   INT DEFAULT NULL,
+    --first_ascent_id     INT DEFAULT NULL,
+    --climb_equipped_by   INT DEFAULT NULL,
     crag_name           VARCHAR(64),
     climb_len_ft        INT,
     CHECK (climb_len_ft > 0), -- Climbs must not be stupidly short.
