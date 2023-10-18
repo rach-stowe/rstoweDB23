@@ -5,10 +5,18 @@
     error_reporting(E_ALL);
 
     // Allow existing user to connect to database
+    /*
     $dbhost = 'localhost';
     $dbuser = 'Rachel';
     $dbpass = 'squirtle';
     $conn = new mysqli($dbhost, $dbuser, $dbpass);
+    */
+
+    // TEST: log in using default credentials
+    $config = parse_ini_file('/home/Rachel/mysqli.ini');
+    $conn = new mysqli($config['mysqli.default_host'],
+                       $config['mysqli.default_user'],
+                       $config['mysqli.default_pw']);
 
     // Check if user successfully connected to database
     if ($conn->connect_errno) {
