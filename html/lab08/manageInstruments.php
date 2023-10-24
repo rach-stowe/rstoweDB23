@@ -23,11 +23,6 @@
 
     echo "Successfully connected to " . $dbname . " database." . "<br>"; 
 
-    //Prepare deletion statement
-    //$del_stmt = $conn->prepare("DELETE...");
-    //$del_stmt->bind_param('i', $id);
-    //echo "Delete statement worked";
-
     $q = "SELECT (instrument_id), (instrument_type), (student_name)
           FROM instruments 
           LEFT OUTER JOIN student_instruments 
@@ -87,6 +82,10 @@ function result_to_html_table($result) {
 <?php } 
 
 result_to_html_table($result);
+
+//Prepare deletion statement
+$del_stmt = $conn->prepare("DELETE...");
+$del_stmt->bind_param('i', $id);
 
 ?>
 
