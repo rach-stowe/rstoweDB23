@@ -4,7 +4,6 @@
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
 
-
     // Log in using default credentials
     $config = parse_ini_file('/home/Rachel/mysqli.ini');
     $dbname = 'instrument_rentals';
@@ -23,13 +22,61 @@
 
     echo "Successfully connected to " . $dbname . " database." . "<br>"; 
 
+    // Check if instruments need to be added
+    if (array_key_exists('add', $_POST)){
+        $insert = "INSERT INTO instruments (instrument_type)
+                    VALUES  ('Guitar'),
+                            ('Trumpet'),
+                            ('Flute'),
+                            ('Theramin'),
+                            ('Violin'),
+                            ('Tuba'),
+                            ('Melodica'),
+                            ('Trombone'),
+                            ('Keyboard')";
+        if(!$conn->query($insert)){
+            echo $conn->error;
+        } else {
+            header("Location: {$_SERVER['REQUEST_URI']}", true, 303);
+            exit(); 
+        }
+    }
+
+    // Prepare query for table
     $q = "SELECT (instrument_id), (instrument_type), (student_name)
           FROM instruments 
           LEFT OUTER JOIN student_instruments 
           USING (instrument_id)
           LEFT OUTER JOIN students 
           USING (student_id)";
+
+    // Get table data
     $result = $conn->query($q);
+    $resrows = $result->fetch_all();
+
+    //Prepare deletion statement
+    $del_stmt = $conn->prepare("DELETE FROM instruments WHERE instrument_id = ?");
+    $del_stmt->bind_param('i', $id);
+
+    // Check if any rows should be deleted
+    $deleted = false;
+    for($i = 0; $i < $result->num_rows; $i++){
+        $id = $resrows[$i][0];
+        $key = "checkbox" . $id;
+        if (isset($_POST[$key])){
+            $deleted = true;
+            if(!$del_stmt->execute()){
+                echo $conn->error;
+            }
+        }
+    }
+
+    // If rows need to be deleted, reload page
+    if($deleted){
+        header("Location: {$_SERVER['REQUEST_URI']}", true, 303);
+        exit();
+    }
+    
 ?> 
 
 
@@ -44,8 +91,7 @@ function result_to_html_table($result) {
         $num_rows = $result->num_rows;
         $num_cols = $result->field_count;
         $fields = $result->fetch_fields();
-        ?>
-        <form action="deleteFromTable.php" method=POST>
+        ?>        
         <!-- Description of table - - - - - - - - - - - - - - - - - - - - -->
         <p>This table has <?php echo $num_rows; ?> rows and <?php echo $num_cols; ?> columns.</p>
         
@@ -76,16 +122,25 @@ function result_to_html_table($result) {
             <?php } ?>
             </tr>
         <?php } ?>
-        </tbody></table>
-        <input type="submit" value="Delete Selected Records" method=POST/>
-        </form>
+        </tbody></table>      
 <?php } 
 
-result_to_html_table($result);
-
-//Prepare deletion statement
-$del_stmt = $conn->prepare("DELETE...");
-$del_stmt->bind_param('i', $id);
-
+// Show table on page ?>
+<form action="manageInstruments.php" method=POST>
+<?php 
+    $result2 = $conn->query($q);
+    result_to_html_table($result2); 
 ?>
+<input name="delete" type="submit" value="Delete Selected Records" method=POST/>
+</form>
+
+<?php // Add instruments ?>
+<form  method=POST>
+<input name="add" type="submit" value="Add Extra Records"/>
+</form>
+
+
+
+
+
 
