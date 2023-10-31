@@ -22,8 +22,6 @@ BEGIN
     DELETE climbs FROM climbs 
         INNER JOIN developed_climbs 
         USING (climb_id) 
-        LEFT OUTER JOIN first_ascents
-        USING (climb_id)
     WHERE developed_climbs.developed_date > DATE_SUB(CURDATE(), INTERVAL 1 YEAR);
     SET FOREIGN_KEY_CHECKS = TRUE;
 END //
