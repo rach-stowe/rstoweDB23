@@ -4,6 +4,46 @@
     ini_set('display_startup_errors', 1);
     error_reporting(E_ALL);
 
+    // Light/dark mode
+    $mode = "user_mode";
+    $light = "light";
+    $dark = "dark";
+    $button_pressed = "yes";
+    $button_label =  "Toggle Dark/Light Modes";
+    
+    if (!isset($_COOKIE[$mode])){
+        setcookie($mode, $light, 0, "/", "", false, true);
+        header("Location: {$_SERVER['REQUEST_URI']}", true, 303);
+        exit();
+    }
+    
+    if (isset($_POST[$button_pressed])){
+        $new_mode = $_COOKIE[$mode] == $light ? $dark : $light;
+        setcookie($mode, $new_mode, 0, "/", "", false, true);
+        header("Location: {$_SERVER['REQUEST_URI']}", true, 303);
+        exit();
+    }
+
+    // Start session
+    session_start();
+
+    if (!array_key_exists('num_deleted', $_SESSION)){
+        $_SESSION['num_deleted'] = 0; 
+    }
+
+    if (isset($_POST['logout'])){
+        session_unset();
+        session_destroy();
+        header("Location: {$_SERVER['REQUEST_URI']}", true, 303);
+        exit();
+    }
+
+    if (isset($_POST['name'])){
+        $_SESSION['username'] = $_POST['name'];
+        header("Location: {$_SERVER['REQUEST_URI']}", true, 303);
+        exit(); 
+    }
+
     // Log in using default credentials
     $config = parse_ini_file('/home/Rachel/mysqli.ini');
     $dbname = 'instrument_rentals';
@@ -20,20 +60,9 @@
         exit; // Quit PHP script if connection fails.
     } 
 
-    echo "Successfully connected to " . $dbname . " database." . "<br>"; 
-
-    // Check if user entered a name for a session
-    if (array_key_exists('name', $_POST)){
-        session_start();
-        $_SESSION["username"] = $_POST['name']; 
-        ?><h4><?php echo "Hello, " . $_POST['name'] . "!";?></h4><?php
-        if(!$conn->query($insert)){
-            echo $conn->error;
-        } else {
-            header("Location: {$_SERVER['REQUEST_URI']}", true, 303);
-            exit(); 
-        }
-    }
+?>
+    <p><?php echo "Successfully connected to " . $dbname . " database." . "<br>";?></p>
+<?php 
 
     // Check if instruments need to be added
     if (array_key_exists('add', $_POST)){
@@ -80,6 +109,10 @@
             $deleted = true;
             if(!$del_stmt->execute()){
                 echo $conn->error;
+            } else {
+                if (isset($_SESSION['num_deleted'])){
+                    $_SESSION['num_deleted']++;
+                }
             }
         }
     }
@@ -89,11 +122,16 @@
         header("Location: {$_SERVER['REQUEST_URI']}", true, 303);
         exit();
     }
-    
-?> 
 
-
+    if ($_COOKIE[$mode] == $dark){
+?>
+        <link rel="stylesheet" href="darkmode.css">
 <?php
+    } else {
+?>
+        <link rel="stylesheet" href="basic.css">
+<?php
+    }
 
 function result_to_html_table($result) {
         // $result is a mysqli result object. This function formats the object as an
@@ -138,14 +176,34 @@ function result_to_html_table($result) {
         </tbody></table>      
 <?php } 
 
-// Ask for username ?>
-<br>
-<form method=POST>
-<input name="name" type="text" placeholder="Enter your name">
-<input name="submit" type="submit" value="Remember me"/>
-</form>
+// Toggle light and dark mode
+?>
+    <h1>
+    <?php echo $_COOKIE[$mode] == $dark ? "Welcome to the Dark Side" : "Delete Instruments"; ?>
+    </h1>
+    <form method=POST>
+    <input type="submit" name="<?= $button_pressed ?>" value="Toggle Light/Dark Mode"/>
+    </form>
+ <?php
 
-<?php // Show table on page ?>
+// Ask for username or create logout button if username already entered
+if (isset($_SESSION['username'])){ ?>
+    <h4><?php echo "Hello, " . $_SESSION['username'] . "!";?></h4>
+    <form action="manageInstrumentsNew.php" method=POST>
+    <input type=submit name='logout' value="Logout"/>
+    </form>
+<?php
+} else {
+?>
+    <br>
+    <form method=POST>
+    <input name="name" type="text" placeholder="Enter your name">
+    <input name="submit" type="submit" value="Remember me"/>
+    </form>
+<?php
+}
+
+// Show table on page ?>
 <form action="manageInstrumentsNew.php" method=POST>
 <?php 
     $result2 = $conn->query($q);
@@ -153,6 +211,19 @@ function result_to_html_table($result) {
 ?>
 <input name="delete" type="submit" value="Delete Selected Records" method=POST/>
 </form>
+
+<p>
+You have deleted 
+<?php 
+if (isset($_SESSION['num_deleted']) && $_SESSION['num_deleted'] > 0){
+    echo $_SESSION['num_deleted'] . " record(s) this session.";
+} else {
+    echo "no records this session.";
+}
+?>
+<br>
+<i>Logging out will clear this counter.</i>
+</p>
 
 <?php // Add instruments ?>
 <form  method=POST>
