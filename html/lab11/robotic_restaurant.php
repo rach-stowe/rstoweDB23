@@ -6,7 +6,7 @@
     
     // Log in using default credentials
     $config = parse_ini_file('/home/Rachel/mysqli.ini');
-    $dbname = 'instrument_rentals';
+    $dbname = 'robo_rest_fall_2023';
     $conn = new mysqli($config['mysqli.default_host'],
                         $config['mysqli.default_user'],
                         $config['mysqli.default_pw'],
@@ -30,14 +30,50 @@
 <p>You can <code>grep</code> anything you want from Alice's restaurant.</p>
     
 <form action="order_confirm.php" method="POST">
-<h2>Menu</h2>
-?php
-    if (!$menu_res = $conn->query(file_get_contents($sql_path . "select_menu_items.sql"))){
+<h2>Place an Order</h2>
+<?php
+    function result_to_input_table($result) {
+        $result_body = $result->fetch_all();
+        $num_rows = $result->num_rows;
+        $num_cols = $result->field_count;
+        $fields = $result->fetch_fields();
+        ?>        
+        
+        <!-- Begin header - - - - - - - - - - - - - - - - - - - - -->
+        <table>
+        <thead>
+        <tr>
+            <td><b>Quantity</b></td>
+            <td><b>Dish</b></td>
+            <td><b>Price</b></td>
+        </tr>
+        </thead>
+        
+        <!-- Begin body - - - - - - - - - - - - - - - - - - - - - -->
+        <tbody>
+        <?php for ($i=0; $i<$num_rows; $i++){ ?>
+            <?php $id = $result_body[$i][0]; ?>
+            <tr>    
+                <td>
+                <input type="number"
+                name="dish<?php echo $id; ?>"/>
+                </td> 
+                <td><?php echo $result_body[$i][1];?></td>
+                <td><?php echo $result_body[$i][2];?></td>
+            </tr>
+        <?php } ?>
+        </tbody></table>      
+<?php } 
+
+    // Get all dishes on the menu
+    if (!$menu_res = $conn->query("SELECT * FROM Dishes;")){
         echo "<i>Failed to load menu!</i>\n";
         exit();
     }
     result_to_input_table($menu_res);
 ?>
+
+<br>
    
 <table>
     <thead>
@@ -48,6 +84,11 @@
         <tr>
             <td style="text-align: right">Name:</td>
             <td><input type="text" name="cust_name" required/></td>
+        </tr>
+        <!-- Email -->
+        <tr>
+            <td style="text-align: right">Email:</td>
+            <td><input type="text" name="cust_email" required/></td>
         </tr>
         <!-- Location -->
         <tr>
@@ -79,7 +120,39 @@
     
 <h2>Pending Orders</h2>
 <?php
-    if (!$orders_res = $conn->query(file_get_contents($sql_path . "select_pending_orders.sql"))){
+    function result_to_html_table($result) {
+        $result_body = $result->fetch_all();
+        $num_rows = $result->num_rows;
+        $num_cols = $result->field_count;
+        $fields = $result->fetch_fields();
+        ?>        
+        <!-- Description of table - - - - - - - - - - - - - - - - - - - - -->
+        <p>This table has <?php echo $num_rows; ?> rows and <?php echo $num_cols; ?> columns.</p>
+        
+        <!-- Begin header - - - - - - - - - - - - - - - - - - - - -->
+        <table>
+        <thead>
+        <tr>
+        <?php for ($i=0; $i<$num_cols; $i++){ ?>
+            <td><b><?php echo $fields[$i]->name; ?></b></td>
+        <?php } ?>
+        </tr>
+        </thead>
+        
+        <!-- Begin body - - - - - - - - - - - - - - - - - - - - - -->
+        <tbody>
+        <?php for ($i=0; $i<$num_rows; $i++){ ?>
+            <?php $id = $result_body[$i][0]; ?>
+            <tr>    
+            <?php for($j=0; $j<$num_cols; $j++){ ?>
+                <td><?php echo $result_body[$i][$j]; ?></td>
+            <?php } ?>
+            </tr>
+        <?php } ?>
+        </tbody></table>      
+<?php } 
+
+    if (!$orders_res = $conn->query("SELECT * FROM Orders;")){
         echo "<i>Failed to load orders!</i>\n";
         exit();
     }
