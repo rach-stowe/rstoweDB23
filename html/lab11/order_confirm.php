@@ -51,11 +51,15 @@
     //$orderid = htmlspecialchars($_POST[''])
     //<h2>Your order #<?php echo 
 
-    // Get all dishes on the menu
-    if (!$menu_res = $conn->query("SELECT * FROM Dishes;")){
+    echo "Thank you, " . $custname . "!<br><?php";
+
+    $order_query = $conn->query("INSERT INTO Orders VALUES ()");
+
+    // Get all dishes in the order
+    if (!$order_res = $conn->query("SELECT * FROM Dishes;")){
         echo "<i>Failed to load menu!</i>\n";
         exit();
     }
-    result_to_output($menu_res);
+    result_to_output($order_res);
 ?>
 </body>
