@@ -20,10 +20,13 @@
         exit; // Quit PHP script if connection fails.
     } 
 
-    $custname = htmlspecialchars($_POST['cust_name']);
+    $custfirst = htmlspecialchars($_POST['cust_first']);
+    $custlast = htmlspecialchars($_POST['cust_last']);
     $custemail = htmlspecialchars($_POST['cust_email']);
     $custlat = htmlspecialchars($_POST['cust_lat']);
+    settype($custlat, "float");
     $custlon = htmlspecialchars($_POST['cust_lon']);
+    settype($custlon, "float");
 
     function result_to_output($result) {
         $result_body = $result->fetch_all();
@@ -53,13 +56,46 @@
     //$orderid = htmlspecialchars($_POST[''])
     //<h2>Your order #<?php echo 
 
-    echo "Thank you, " . $custname . "!<br><br><?php";
+    echo "Thank you, " . $custfirst . " " . $custlast . "!<br><br><?php";
+    if(!$cust_id_query = $conn->prepare("SELECT CustomerID FROM Customers WHERE CustomerEmail = ?;")){
+        echo "Error preparing statement";
+        exit();
+    } else {
+        if (!$cust_id_query->bind_param("s", $custemail)){
+            echo "New Customer";
+            ?> <h3>New customer!</h3> <?php
+            // New customer: insert into database
+            if(!$new_cust_query = $conn->prepare("INSERT INTO Customers(CustomerFirstName, CustomerLastName, CustomerEmail, CustomerDefaultLat, CustomerDefaultLong) VALUES (?, ?, ?, ?, ?);")){
+                echo "Error inserting customer";   
+                exit();                            
+            } else {
+                if(!$new_cust_query->bind_param("sssdd", $custfirst, $custlast, $custemail, $custlat, $custlon)){
+                    echo "Error binding parameters";
+                    exit();
+                } else {
+                    if(!$cust_id_query = $conn->prepare("SELECT CustomerID FROM Customers WHERE CustomerEmail = ?;")){
+                        echo "Error preparing statement";
+                        exit();
+                    } else {
+                        if (!$cust_id_query->bind_param("s", $custemail)){
+                            echo "Error binding parameters";
+                        }
+                    }
+                }
+            }
+        } 
+        $cust_id = $cust_id_query->fetch_all();
+    }
 
-    if(!$order_query = $conn->query("INSERT INTO Orders(FranchiseID, CustomerID, DeliveryLocationLat, DeliveryLocationLon, OrderSubmissionTime, OrderDeliveryTime) VALUES (1, 1, $custlat, $custlon, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());")){
+
+    if(!$order_query = $conn->prepare("INSERT INTO Orders(FranchiseID, CustomerID, DeliveryLocationLat, DeliveryLocationLon) VALUES (1,?,?,?);")){
         echo "Failed to insert order";
         exit();
     } else {
-        echo "Insert succeeded";
+        if(!$order_query->bind_param("idd", $custID, $custlat, $custlon)){
+            echo "Failed to bind parameters";
+            exit();
+        }
     }
 
     // Get all dishes in the order
@@ -69,4 +105,5 @@
     }
     result_to_output($order_res);
 ?>
+<a href="robotic_restaurant.php">Return to homepage</a>
 </body>

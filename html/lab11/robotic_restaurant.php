@@ -80,10 +80,15 @@
         <th></th>
     </thead>
     <tbody>
-        <!-- Name -->
+        <!-- First Name -->
         <tr>
-            <td style="text-align: right">Name:</td>
-            <td><input type="text" name="cust_name" value="Rachel" required/></td>
+            <td style="text-align: right">First Name:</td>
+            <td><input type="text" name="cust_first" value="Rachel" required/></td>
+        </tr>
+        <!-- Last Name -->
+        <tr>
+            <td style="text-align: right">Last Name:</td>
+            <td><input type="text" name="cust_last" value="Stowe" required/></td>
         </tr>
         <!-- Email -->
         <tr>
@@ -151,7 +156,7 @@
         <?php } ?>
         </tbody></table>      
 <?php } 
-    $order_summary = "SELECT OrderID FROM Orders INNER JOIN Customers USING CustomerID GROUP BY (OrderID);";
+    $order_summary = "SELECT OrderID, CustomerID FROM Orders /*INNER JOIN Customers USING CustomerID GROUP BY (OrderID)*/;";
     if (!$orders_res = $conn->query($order_summary)){
         echo "<i>Failed to load orders!</i>\n";
         exit();
