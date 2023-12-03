@@ -83,21 +83,21 @@
         <!-- Name -->
         <tr>
             <td style="text-align: right">Name:</td>
-            <td><input type="text" name="cust_name" required/></td>
+            <td><input type="text" name="cust_name" value="Rachel" required/></td>
         </tr>
         <!-- Email -->
         <tr>
             <td style="text-align: right">Email:</td>
-            <td><input type="text" name="cust_email" required/></td>
+            <td><input type="text" name="cust_email" value="rach@yahoo.com" required/></td>
         </tr>
         <!-- Location -->
         <tr>
             <td style="text-align: right">Latitude:</td>
-            <td><input type="text" name="cust_lat" pattern="[0-9]+(\.[0-9])?" title="Enter a valid decimal number" required/></td>
+            <td><input type="text" name="cust_lat" pattern="[0-9]+(\.[0-9])?" title="Enter a valid decimal number" value=100 required/></td>
         </tr>
         <tr>
             <td style="text-align: right">Longitude:</td>
-            <td><input type="text" name="cust_lon" pattern="[0-9]+(\.[0-9])?" title="Enter a valid decimal number" required/></td>
+            <td><input type="text" name="cust_lon" pattern="[0-9]+(\.[0-9])?" title="Enter a valid decimal number" value=200 required/></td>
         </tr>
     </tbody>
 </table>
@@ -151,8 +151,8 @@
         <?php } ?>
         </tbody></table>      
 <?php } 
-
-    if (!$orders_res = $conn->query("SELECT * FROM Orders;")){
+    $order_summary = "SELECT OrderID FROM Orders INNER JOIN Customers USING CustomerID GROUP BY (OrderID);";
+    if (!$orders_res = $conn->query($order_summary)){
         echo "<i>Failed to load orders!</i>\n";
         exit();
     }

@@ -28,15 +28,17 @@
     function result_to_output($result) {
         $result_body = $result->fetch_all();
         $num_rows = $result->num_rows;
-        
+    
+        ?><p><?php
         for ($i=0; $i<$num_rows; $i++){ 
             $id = $result_body[$i][0];
             $dishquantity = htmlspecialchars($_POST['dish'.$id]);
             if ($dishquantity >0){
                 echo $dishquantity . "x " . $result_body[$i][1];
-                ?> <br> <?php
+                ?><br><?php
             }
         }
+        ?></p><?php
     } 
 
 ?>    
@@ -51,9 +53,14 @@
     //$orderid = htmlspecialchars($_POST[''])
     //<h2>Your order #<?php echo 
 
-    echo "Thank you, " . $custname . "!<br><?php";
+    echo "Thank you, " . $custname . "!<br><br><?php";
 
-    $order_query = $conn->query("INSERT INTO Orders VALUES ()");
+    if(!$order_query = $conn->query("INSERT INTO Orders(FranchiseID, CustomerID, DeliveryLocationLat, DeliveryLocationLon, OrderSubmissionTime, OrderDeliveryTime) VALUES (1, 1, $custlat, $custlon, CURRENT_TIMESTAMP(), CURRENT_TIMESTAMP());")){
+        echo "Failed to insert order";
+        exit();
+    } else {
+        echo "Insert succeeded";
+    }
 
     // Get all dishes in the order
     if (!$order_res = $conn->query("SELECT * FROM Dishes;")){
