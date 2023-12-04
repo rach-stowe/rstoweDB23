@@ -130,6 +130,7 @@
         $num_rows = $result->num_rows;
         $num_cols = $result->field_count;
         $fields = $result->fetch_fields();
+        global $conn;
         ?>        
         <!-- Description of table - - - - - - - - - - - - - - - - - - - - -->
         <p>This table has <?php echo $num_rows; ?> rows and <?php echo $num_cols; ?> columns.</p>
@@ -141,6 +142,8 @@
         <?php for ($i=0; $i<$num_cols; $i++){ ?>
             <td><b><?php echo $fields[$i]->name; ?></b></td>
         <?php } ?>
+            <td><b>Description</b></td>
+            <td><b>Cost</b></td>
         </tr>
         </thead>
         
@@ -151,12 +154,52 @@
             <tr>    
             <?php for($j=0; $j<$num_cols; $j++){ ?>
                 <td><?php echo $result_body[$i][$j]; ?></td>
-            <?php } ?>
+            <?php } 
+            if (!$descr_query = $conn->query("SELECT COUNT(DishID) AS 'count', DishName AS 'name'
+                                              FROM OrderDishes
+                                                    INNER JOIN Dishes
+                                                    USING (DishID)
+                                                    WHERE OrderID = $id
+                                                    GROUP BY (DishID);")){
+                echo "Failed to load description";  
+                exit();                                      
+            }
+            $descr_result = $descr_query->fetch_all();
+            $d_rows = $descr_query->num_rows;
+            ?><td><?php
+            for ($row=0; $row<$d_rows; $row++){
+                echo $descr_result[$row][0] . "x " . $descr_result[$row][1];
+                if($row+1 != $d_rows){
+                    echo ", ";
+                }
+            }
+            ?></td>
+            <?php
+            if(!$cost_query = $conn->query("SELECT DishPrice
+                                              FROM OrderDishes
+                                                   INNER JOIN Dishes
+                                                   USING (DishID)
+                                                   WHERE OrderID=$id;")){
+                echo "Failed to load dish prices";
+                exit();
+            }
+            $cost_result = $cost_query->fetch_all();
+            $cost_rows = $cost_query->num_rows;
+            $total_cost = 0;
+            for ($d=0; $d<$cost_rows; $d++){
+                $total_cost = $total_cost + $cost_result[$d][0];
+            }
+            ?>
+            <td><?php echo $total_cost; ?></td>
             </tr>
         <?php } ?>
         </tbody></table>      
 <?php } 
-    $order_summary = "SELECT OrderID, CustomerID FROM Orders /*INNER JOIN Customers USING CustomerID GROUP BY (OrderID)*/;";
+    $order_summary = "SELECT OrderID AS 'Order ID', GROUP_CONCAT(CustomerFirstName, ' ', CustomerLastName) AS 'Name', OrderSubmissionTime AS 'Date and Time'
+                        FROM Orders 
+                             INNER JOIN Customers 
+                             USING (CustomerID) 
+                             GROUP BY (OrderID);";
     if (!$orders_res = $conn->query($order_summary)){
         echo "<i>Failed to load orders!</i>\n";
         exit();
