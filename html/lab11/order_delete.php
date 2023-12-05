@@ -31,24 +31,16 @@
 <body>
     <h1>Order Deletion</h1>
     <?php
-    $order_deletion = $conn->prepare("SELECT OrderID FROM Orders WHERE OrderID = ?;");
-    $order_deletion->bind_param("i", $deletion_id);
-    if(!$order_deletion->execute()){
-        ?>
-        <h3><?php echo "Order #". $deletion_id . " does not exist."?></h3>
-        <?php
-    } else {
-        // Delete order
-        $delete_order_query = $conn->prepare("DELETE FROM Orders WHERE OrderID = ?;");
-        $delete_order_query->bind_param("i", $deletion_id);
-        if(!$delete_order_query->execute()){
-            echo "deletion failed.";
-            exit();
-        }
-        ?>
-        <h3><?php echo "Order #". $deletion_id . " was successfully deleted."?></h3>
-        <?php
-    }?>
+    // Delete order
+    $delete_order_query = $conn->prepare("DELETE FROM Orders WHERE OrderID = ? AND OrderDeliveryTime > CURRENT_TIMESTAMP();");
+    $delete_order_query->bind_param("i", $deletion_id);
+    if(!$delete_order_query->execute()){
+        echo "deletion failed.";
+        exit();
+    }
+    ?>
+    <h3><?php echo "Deletion request for order #". $deletion_id . " was submitted."?></h3>
+    <p>Please note that deletion requests can not be fulfilled if the order ID is invalid or if the order was placed over 10 minutes ago.</p>
     <a href="robotic_restaurant.php">Return to homepage</a>
 </body>
 

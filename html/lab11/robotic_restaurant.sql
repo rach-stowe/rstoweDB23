@@ -48,7 +48,10 @@ CREATE TABLE Orders(
 CREATE TABLE OrderDishes (
     PRIMARY KEY (OrderDishID),
     FOREIGN KEY (DishID) REFERENCES Dishes (DishID),
-    FOREIGN KEY (OrderID) REFERENCES Orders (OrderID),
+    CONSTRAINT fk_orderdishes_order_id 
+        FOREIGN KEY (OrderID) 
+        REFERENCES Orders (OrderID)
+        ON DELETE CASCADE,
     OrderDishID             INT AUTO_INCREMENT,
     DishID                  INT,
     OrderID                 INT,
@@ -70,7 +73,10 @@ CREATE TABLE DroneAssignments(
     DroneID                 INT AUTO_INCREMENT,
     OrderDishID             INT,
     FOREIGN KEY (DroneID) REFERENCES Drones(DroneID),
-    FOREIGN KEY (OrderDishID) REFERENCES OrderDishes(OrderDishID)
+    CONSTRAINT fk_droneassign_orderdish_id 
+        FOREIGN KEY (OrderDishID) 
+        REFERENCES OrderDishes(OrderDishID)
+        ON DELETE CASCADE 
  );
 
 

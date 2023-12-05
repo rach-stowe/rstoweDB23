@@ -83,26 +83,26 @@
         <!-- First Name -->
         <tr>
             <td style="text-align: right">First Name:</td>
-            <td><input type="text" name="cust_first" value="Rachel" required/></td>
+            <td><input type="text" name="cust_first" required/></td>
         </tr>
         <!-- Last Name -->
         <tr>
             <td style="text-align: right">Last Name:</td>
-            <td><input type="text" name="cust_last" value="Stowe" required/></td>
+            <td><input type="text" name="cust_last" required/></td>
         </tr>
         <!-- Email -->
         <tr>
             <td style="text-align: right">Email:</td>
-            <td><input type="text" name="cust_email" value="rach@yahoo.com" required/></td>
+            <td><input type="text" name="cust_email" required/></td>
         </tr>
         <!-- Location -->
         <tr>
             <td style="text-align: right">Latitude:</td>
-            <td><input type="text" name="cust_lat" pattern="[0-9]+(\.[0-9])?" title="Enter a valid decimal number" value=100 required/></td>
+            <td><input type="text" name="cust_lat" pattern="[0-9]+(\.[0-9])?" title="Enter a valid decimal number" required/></td>
         </tr>
         <tr>
             <td style="text-align: right">Longitude:</td>
-            <td><input type="text" name="cust_lon" pattern="[0-9]+(\.[0-9])?" title="Enter a valid decimal number" value=200 required/></td>
+            <td><input type="text" name="cust_lon" pattern="[0-9]+(\.[0-9])?" title="Enter a valid decimal number" required/></td>
         </tr>
     </tbody>
 </table>
@@ -132,18 +132,16 @@
         $fields = $result->fetch_fields();
         global $conn;
         ?>        
-        <!-- Description of table - - - - - - - - - - - - - - - - - - - - -->
-        <p>This table has <?php echo $num_rows; ?> rows and <?php echo $num_cols; ?> columns.</p>
         
         <!-- Begin header - - - - - - - - - - - - - - - - - - - - -->
         <table>
         <thead>
         <tr>
         <?php for ($i=0; $i<$num_cols; $i++){ ?>
-            <td><b><?php echo $fields[$i]->name; ?></b></td>
+            <td style="padding:10px"><b><?php echo $fields[$i]->name; ?></b></td>
         <?php } ?>
-            <td><b>Description</b></td>
-            <td><b>Cost</b></td>
+            <td style="padding:10px"><b>Description</b></td>
+            <td style="padding:10px"><b>Cost</b></td>
         </tr>
         </thead>
         
@@ -153,7 +151,7 @@
             <?php $id = $result_body[$i][0]; ?>
             <tr>    
             <?php for($j=0; $j<$num_cols; $j++){ ?>
-                <td><?php echo $result_body[$i][$j]; ?></td>
+                <td style="padding:10px"><?php echo $result_body[$i][$j]; ?></td>
             <?php } 
             if (!$descr_query = $conn->query("SELECT COUNT(DishID) AS 'count', DishName AS 'name'
                                               FROM OrderDishes
@@ -166,7 +164,7 @@
             }
             $descr_result = $descr_query->fetch_all();
             $d_rows = $descr_query->num_rows;
-            ?><td><?php
+            ?><td style="padding:10px"><?php
             for ($row=0; $row<$d_rows; $row++){
                 echo $descr_result[$row][0] . "x " . $descr_result[$row][1];
                 if($row+1 != $d_rows){
@@ -190,7 +188,7 @@
                 $total_cost = $total_cost + $cost_result[$d][0];
             }
             ?>
-            <td><?php echo $total_cost; ?></td>
+            <td style="padding:10px"><?php echo $total_cost; ?></td>
             </tr>
         <?php } ?>
         </tbody></table>      

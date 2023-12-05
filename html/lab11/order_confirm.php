@@ -140,10 +140,17 @@
     <h3>Order #<?php echo  $order_id;?></h3>
     <?php
 
-    // Set delivery time
-    $delivery_time_query = $conn->query("SELECT DATE_ADD(OrderSubmissionTime, INTERVAL 30 MINUTE) FROM Orders;");
-    $delivery_time_result = $delivery_time_query->fetch_all();
-    $delivery_time = $delivery_time_result[0][0];
+    // Set delivery time so that order cannot be deleted after 10 minutes
+    $delivery_time_query = $conn->prepare("SELECT DATE_ADD(OrderSubmissionTime, INTERVAL 10 MINUTE) FROM Orders WHERE OrderID = ?;");
+    $delivery_time_query->bind_param("i", $order_id);
+    if(!$delivery_time_query->execute()){
+        echo "Failed to get delivery time";
+        exit();
+    }
+    $delivery_time_result = $delivery_time_query->get_result();
+    $delivery_time_array = $delivery_time_result->fetch_all();
+    $delivery_time = $delivery_time_array[0][0];
+    echo "Delivery time: " . $delivery_time;
     $update_time_query = $conn->prepare("UPDATE Orders SET OrderDeliveryTime = ? WHERE OrderID = ?");
     $update_time_query->bind_param("si", $delivery_time,$order_id);
     if(!$update_time_query->execute()){
@@ -170,6 +177,13 @@
     if(!$valid_weight){
         // Delete new order
         echo "Order is too heavy for a drone to carry! Order cannot be processed.";
+        // Delete order
+        $delete_order_query = $conn->prepare("DELETE FROM Orders WHERE OrderID = ?;");
+        $delete_order_query->bind_param("i", $order_id);
+        if(!$delete_order_query->execute()){
+            echo "deletion failed.";
+            exit();
+        }
     }
 ?>
 <br>
