@@ -19,6 +19,9 @@
         echo "Error: " . $conn->connect_error . "\n";
         exit; // Quit PHP script if connection fails.
     } 
+    
+    // Which order will be deleted
+    $deletion_id = htmlspecialchars($_POST['order_id']);
 ?>   
 
 <!DOCTYPE html>
@@ -27,5 +30,26 @@
 </head>
 <body>
     <h1>Order Deletion</h1>
+    <?php
+    $order_deletion = $conn->prepare("SELECT OrderID FROM Orders WHERE OrderID = ?;");
+    $order_deletion->bind_param("i", $deletion_id);
+    if(!$order_deletion->execute()){
+        ?>
+        <h3><?php echo "Order #". $deletion_id . " does not exist."?></h3>
+        <?php
+    } else {
+        // Delete order
+        $delete_order_query = $conn->prepare("DELETE FROM Orders WHERE OrderID = ?;");
+        $delete_order_query->bind_param("i", $deletion_id);
+        if(!$delete_order_query->execute()){
+            echo "deletion failed.";
+            exit();
+        }
+        ?>
+        <h3><?php echo "Order #". $deletion_id . " was successfully deleted."?></h3>
+        <?php
+    }?>
     <a href="robotic_restaurant.php">Return to homepage</a>
 </body>
+
+

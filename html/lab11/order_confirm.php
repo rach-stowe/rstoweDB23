@@ -74,16 +74,12 @@
         if(!$available_drones_query = $conn->query("SELECT DroneID 
                                                         FROM Drones 
                                                              INNER JOIN DroneAssignments;")){
-            ?><p>No unassigned old drones found. Looking for new drone.</p><?php
             if(!$new_drones_query = $conn->query("SELECT DroneID FROM Drones INNER JOIN DroneAssignments USING(DroneID);")){
-                echo "No new drone found.\n";
                 return FALSE;
             } else {
-                echo "New drone found!\n";
                 return TRUE;
             }
         } else {
-            "Old drone with completed assignment found.\n";
             return TRUE;
         }
     }
