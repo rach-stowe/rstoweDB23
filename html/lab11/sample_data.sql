@@ -7,8 +7,7 @@ VALUES ("Black Bean Burger", 11.99, 200),
        ("Quesadilla", 5.99, 150);
 
 INSERT INTO Franchises(FranchiseLocationLat, FranchiseLocationLon, FranchiseStreet, FranchiseCity, FranchiseState, FranchiseZIP)
-VALUES (400, 400, "500 Rose Street", "Lexington", "KY", "40359"),
-       (50, 100, "200 Rose Avenue", "Lexington", "KY", "40359");
+VALUES (400, 400, "500 Rose Street", "Lexington", "KY", "40359");
 
 INSERT INTO Customers(CustomerFirstName, CustomerLastName, CustomerEmail, CustomerDefaultLat, CustomerDefaultLong)
 VALUES ("Rachel", "Stowe", "rachel.stowe@centre.edu", 200, 100),
@@ -17,9 +16,9 @@ VALUES ("Rachel", "Stowe", "rachel.stowe@centre.edu", 200, 100),
        ("Rachael", "Stove", "rachael.stove@centre.edu", 50, 400);
 
 INSERT INTO Drones(DroneCallsign, FranchiseID)
-VALUES (12, 2),
-       (30, 2),
-       (25, 2),
+VALUES (12, 1),
+       (30, 1),
+       (25, 1),
        (40, 1),
        (2, 1),
        (7, 1);

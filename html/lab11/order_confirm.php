@@ -20,6 +20,7 @@
         exit; // Quit PHP script if connection fails.
     } 
 
+    // Data from order form
     $custfirst = htmlspecialchars($_POST['cust_first']);
     $custlast = htmlspecialchars($_POST['cust_last']);
     $custemail = htmlspecialchars($_POST['cust_email']);
@@ -28,6 +29,7 @@
     $custlon = htmlspecialchars($_POST['cust_lon']);
     settype($custlon, "float");
 
+    // Output order results in a table and assign dishes to order
     function result_to_output($result,$orderid) {
         global $conn;
         $result_body = $result->fetch_all();
@@ -53,7 +55,41 @@
         ?></p><?php
     } 
 
+    // Assign items in an order to a drone
+    function assign_drone($result){
+        global $conn;
+        $result_body = $result->fetch_all();
+        $num_rows = $result->num_rows;
+        // Get total weight of order
+        $total_weight = 0;
+        for($i=0; $i<$num_rows; $i++){
+            $total_weight = $total_weight + $result_body[$i][1];
+        }
+        // Make sure total weight does not exceed drone capacity
+        if($total_weight > 2000){
+            return FALSE;
+        }
+
+        // Find available drone
+        if(!$available_drones_query = $conn->query("SELECT DroneID 
+                                                        FROM Drones 
+                                                             INNER JOIN DroneAssignments;")){
+            ?><p>No unassigned old drones found. Looking for new drone.</p><?php
+            if(!$new_drones_query = $conn->query("SELECT DroneID FROM Drones INNER JOIN DroneAssignments USING(DroneID);")){
+                echo "No new drone found.\n";
+                return FALSE;
+            } else {
+                echo "New drone found!\n";
+                return TRUE;
+            }
+        } else {
+            "Old drone with completed assignment found.\n";
+            return TRUE;
+        }
+    }
+
 ?>    
+
 <!DOCTYPE html>
 <head>
     <title>Order Confirmation</title>
@@ -62,10 +98,10 @@
     <h1>Order Confirmation</h1>
 
 <?php
-    //$orderid = htmlspecialchars($_POST[''])
-    //<h2>Your order #<?php echo 
 
     echo "Thank you, " . $custfirst . " " . $custlast . "!<br><br><?php";
+
+    // Check if customer is already in the database
     $cust_id_query = $conn->prepare("SELECT CustomerID FROM Customers WHERE CustomerEmail = ?;");
     $cust_id_query->bind_param("s", $custemail);
     if(!$cust_id_query->execute()){
@@ -91,6 +127,7 @@
         }
     }
 
+    // Insert order into database
     $custID = $cust_id_row['CustomerID'];
     $order_query = $conn->prepare("INSERT INTO Orders(FranchiseID, CustomerID, DeliveryLocationLat, DeliveryLocationLon) VALUES (1,?,?,?);");
     $order_query->bind_param("idd", $custID, $custlat, $custlon);
@@ -98,6 +135,8 @@
         echo "Failed to enter new order";
         exit();
     } 
+
+    // Output new order ID
     $order_id_result = $conn->query("SELECT MAX(OrderID) FROM Orders;");
     $order_id_row = $order_id_result->fetch_assoc();
     $order_id = $order_id_row['MAX(OrderID)'];
@@ -105,12 +144,39 @@
     <h3>Order #<?php echo  $order_id;?></h3>
     <?php
 
+    // Set delivery time
+    $delivery_time_query = $conn->query("SELECT DATE_ADD(OrderSubmissionTime, INTERVAL 30 MINUTE) FROM Orders;");
+    $delivery_time_result = $delivery_time_query->fetch_all();
+    $delivery_time = $delivery_time_result[0][0];
+    $update_time_query = $conn->prepare("UPDATE Orders SET OrderDeliveryTime = ? WHERE OrderID = ?");
+    $update_time_query->bind_param("si", $delivery_time,$order_id);
+    if(!$update_time_query->execute()){
+        echo "Failed to update order time";
+        exit();
+    } 
+
     // Get all dishes in the order
     if (!$order_res = $conn->query("SELECT * FROM Dishes;")){
         echo "<i>Failed to load menu!</i>\n";
         exit();
     }
     result_to_output($order_res, $order_id);
+
+    // Assign order to drone for delivery
+    $order_dishes_query = $conn->prepare("SELECT OrderDishID, DishWeightGrams, DishName FROM OrderDishes INNER JOIN Dishes USING (DishID) WHERE OrderID = ?;");
+    $order_dishes_query->bind_param("i", $order_id);
+    if(!$order_dishes_query->execute()){
+        echo "Failed to get dishes in order";
+        exit();
+    }
+    $order_dishes_result = $order_dishes_query->get_result();
+    $valid_weight = assign_drone($order_dishes_result);
+    if(!$valid_weight){
+        // Delete new order
+        echo "Order is too heavy for a drone to carry! Order cannot be processed.";
+    }
 ?>
+<br>
 <a href="robotic_restaurant.php">Return to homepage</a>
 </body>
+</html>
